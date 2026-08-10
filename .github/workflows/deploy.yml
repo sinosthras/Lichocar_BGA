@@ -11,16 +11,16 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Sync files to BGA
-      uses: easingthemes/ssh-deploy@v5.1.0
-      with:
-        REMOTE_HOST: studio.boardgamearena.com
-        REMOTE_USER: ${{ secrets.BGA_USERNAME }}
-        REMOTE_PORT: 22
-        SOURCE: "./"
-        TARGET: "/var/tournoi/projects/lichocar/"
-        SCRIPT_BEFORE: |
-          echo "Connecting to BGA..."
-        SSH_PRIVATE_KEY: ""
-        ARGS: "-rlptgoD --delete"
-        SSH_CMD_ARGS: "-o StrictHostKeyChecking=no -o PreferredAuthentications=password -o PubkeyAuthentication=no"
+    - name: Install lftp
+      run: sudo apt-get update && sudo apt-get install -y lftp
+
+    - name: Upload files via SFTP
+      env:
+        BGA_USER: ${{ secrets.BGA_USERNAME }}
+        BGA_PASS: ${{ secrets.BGA_PASSWORD }}
+      run: |
+        lftp -c "
+        set sftp:auto-confirm yes;
+        open -u $BGA_USER,$BGA_PASS sftp://studio.boardgamearena.com:22;
+        mirror -R --delete --verbose --exclude .git/ --exclude .github/ ./ /var/tournoi/projects/lichocar/;
+        "
