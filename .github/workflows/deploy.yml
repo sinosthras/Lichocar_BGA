@@ -9,15 +9,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: SFTP Deploy to BGA
-      uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.5
       with:
         server: studio.boardgamearena.com
         username: ${{ secrets.BGA_USERNAME }}
         password: ${{ secrets.BGA_PASSWORD }}
-        protocol: sftp
+        sftp: true
         port: 22
         local-dir: ./
         server-dir: /var/tournoi/projects/lichocar/
