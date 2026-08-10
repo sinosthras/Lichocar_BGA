@@ -12,12 +12,15 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Sync files to BGA
-      uses: sshdeploy/deploy-action@v4.2.5
+      uses: easingthemes/ssh-deploy@v5.1.0
       with:
-        server: studio.boardgamearena.com
-        username: ${{ secrets.BGA_USERNAME }}
-        PASSWORD: ${{ secrets.BGA_PASSWORD }}
-        PORT: 22
-        FOLDER: './'
-        TARGET: '/var/tournoi/projects/lichocar/'
+        REMOTE_HOST: studio.boardgamearena.com
+        REMOTE_USER: ${{ secrets.BGA_USERNAME }}
+        REMOTE_PORT: 22
+        SOURCE: "./"
+        TARGET: "/var/tournoi/projects/lichocar/"
+        SCRIPT_BEFORE: |
+          echo "Connecting to BGA..."
+        SSH_PRIVATE_KEY: ""
+        ARGS: "-rlptgoD --delete"
         SSH_CMD_ARGS: "-o StrictHostKeyChecking=no -o PreferredAuthentications=password -o PubkeyAuthentication=no"
