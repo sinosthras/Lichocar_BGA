@@ -1,0 +1,23 @@
+name: Deploy to BGA Studio
+
+on:
+  push:
+    branches: [ main, master ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: SFTP Deploy to BGA
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+      with:
+        server: studio.boardgamearena.com
+        username: ${{ secrets.BGA_USERNAME }}
+        password: ${{ secrets.BGA_PASSWORD }}
+        protocol: sftp
+        port: 22
+        local-dir: ./
+        server-dir: /var/tournoi/projects/lichocar/
