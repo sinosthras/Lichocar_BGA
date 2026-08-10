@@ -11,16 +11,13 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Install lftp
-      run: sudo apt-get update && sudo apt-get install -y lftp
-
-    - name: Upload files via SFTP
+    - name: Upload via SFTP
       env:
         BGA_USER: ${{ secrets.BGA_USERNAME }}
         BGA_PASS: ${{ secrets.BGA_PASSWORD }}
       run: |
-        lftp -c "
-        set sftp:auto-confirm yes;
-        open -u $BGA_USER,$BGA_PASS sftp://studio.boardgamearena.com:22;
-        mirror -R --delete --verbose --exclude .git/ --exclude .github/ ./ /var/tournoi/projects/lichocar/;
-        "
+        sshpass -p "$BGA_PASS" sftp -o StrictHostKeyChecking=no -o Port=22 $BGA_USER@studio.boardgamearena.com <<EOF
+        cd /var/tournoi/projects/lichocar/
+        mput -r *
+        quit
+        EOF
