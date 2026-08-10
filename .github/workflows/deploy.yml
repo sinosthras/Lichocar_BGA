@@ -14,7 +14,7 @@ jobs:
     - name: SFTP Deploy to BGA
       uses: wlixcc/SFTP-Deploy-Action@v1.2.5
       with:
-        host: studio.boardgamearena.com
+        server: studio.boardgamearena.com
         username: ${{ secrets.BGA_USERNAME }}
         password: ${{ secrets.BGA_PASSWORD }}
         port: 22
