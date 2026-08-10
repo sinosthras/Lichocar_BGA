@@ -12,12 +12,12 @@ jobs:
       uses: actions/checkout@v4
 
     - name: SFTP Deploy to BGA
-      uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      uses: wlixcc/SFTP-Deploy-Action@v1.2.5
       with:
-        server: studio.boardgamearena.com
+        host: studio.boardgamearena.com
         username: ${{ secrets.BGA_USERNAME }}
         password: ${{ secrets.BGA_PASSWORD }}
-        sftp: true
         port: 22
-        local-dir: ./
-        server-dir: /var/tournoi/projects/lichocar/
+        local_path: './*'
+        remote_path: '/var/tournoi/projects/lichocar/'
+        sftp_only: true
