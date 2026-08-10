@@ -11,13 +11,13 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: SFTP Deploy to BGA
-      uses: wlixcc/SFTP-Deploy-Action@v1.2.5
+    - name: Sync files to BGA
+      uses: sshdeploy/deploy-action@v4.2.5
       with:
         server: studio.boardgamearena.com
         username: ${{ secrets.BGA_USERNAME }}
-        password: ${{ secrets.BGA_PASSWORD }}
-        port: 22
-        local_path: './*'
-        remote_path: '/var/tournoi/projects/lichocar/'
-        sftp_only: true
+        PASSWORD: ${{ secrets.BGA_PASSWORD }}
+        PORT: 22
+        FOLDER: './'
+        TARGET: '/var/tournoi/projects/lichocar/'
+        SSH_CMD_ARGS: "-o StrictHostKeyChecking=no -o PreferredAuthentications=password -o PubkeyAuthentication=no"
